@@ -1,10 +1,12 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions">
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <title>Book-DB</title>
+        <h:outputStylesheet name="mystyle.css" library="css" />
     </h:head>
     <h:body>
         <h1>Book-DB</h1>
@@ -12,7 +14,7 @@
             ISBN:<h:inputText value="#{bookBean.isbn}" />
             <h:commandButton value="書籍情報取得" action="#{bookBean.getBookData()}"></h:commandButton>
         </h:form>
-        <h:panelGrid columns="2" columnClasses="c1, c2">
+        <h:panelGrid columns="2" columnClasses="c1,c2">
             ISBN:
             <h:outputText value="#{bookBean.isbn}"/>
             タイトル:
@@ -25,6 +27,9 @@
             <h:outputText value="#{bookBean.pubdate}"/>
             表紙:
             <h:graphicImage url="#{bookBean.cover}"/>
+            内容:
+            <h:outputText value="#{bookBean.description}" escape="false" />
+            <!-- <h:outputText value="#{fn:replace(bookBean.description,'\\n','&lt;br/&gt;')}" escape="false"/> -->
         </h:panelGrid>
     </h:body>
 </html>

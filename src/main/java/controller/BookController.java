@@ -2,13 +2,13 @@ package controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import api.BookInfo;
+import json.BookInfo;
 import beans.BookBean;
 import java.io.UnsupportedEncodingException;
 
 public class BookController {
 
-    public void execute(BookBean bookBean) {
+    public void get(BookBean bookBean) {
         // String isbn = "9784798062082";
         String isbn = bookBean.getIsbn();
         String url = "https://api.openbd.jp/v1/get?isbn=" + isbn;
@@ -18,53 +18,68 @@ public class BookController {
         try {
             node = info.getResult(url);
             System.out.println("node:" + node);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            if (node.get(0) != null) {
-                JsonNode obj = node.get(0);
-                if (obj.has("summary")) {
-                    JsonNode summary = obj.get("summary");
-                    bookBean.setIsbn(isbn);
-                    if (summary.has("title")) {
-                        String _title = summary.get("title").toString();
-                        String title = trimDQ(_title);
-                        bookBean.setTitle(title);
-                    }
-                    if (summary.has("volume")) {
-                        String volume = summary.get("volume").toString();
-                        bookBean.setVolume(volume);
-                    }
-                    if (summary.has("series")) {
-                        String series = summary.get("series").toString();
-                        bookBean.setSeries(series);
-                    }
-                    if (summary.has("publisher")) {
-                        String _publisher = summary.get("publisher").toString();
-                        String publisher = trimDQ(_publisher);
-                        bookBean.setPublisher(publisher);
-                    }
-                    if (summary.has("pubdate")) {
-                        String _pubdate = summary.get("pubdate").toString();
-                        String pubdate = trimDQ(_pubdate);
-                        bookBean.setPubdate(pubdate);
-                    }
-                    if (summary.has("series")) {
-                        String series = summary.get("series").toString();
-                        bookBean.setSeries(series);
-                    }
-                    if (summary.has("cover")) {
-                        String cover = summary.get("cover").toString();
-                        System.out.println(cover);
-                        bookBean.setCover(trimDQ(cover));
-                    }
-                    if (summary.has("author")) {
-                        String _author = summary.get("author").toString();
-                        String author = trimDQ(_author);
-                        bookBean.setAuthor(author);
+        if (node.get(0) != null) {
+            JsonNode obj = node.get(0);
+            if (obj.has("summary")) {
+                JsonNode summary = obj.get("summary");
+                bookBean.setIsbn(isbn);
+                if (summary.has("title")) {
+                    String _title = summary.get("title").toString();
+                    String title = trimDQ(_title);
+                    bookBean.setTitle(title);
+                }
+                if (summary.has("volume")) {
+                    String volume = summary.get("volume").toString();
+                    bookBean.setVolume(volume);
+                }
+                if (summary.has("series")) {
+                    String series = summary.get("series").toString();
+                    bookBean.setSeries(series);
+                }
+                if (summary.has("publisher")) {
+                    String _publisher = summary.get("publisher").toString();
+                    String publisher = trimDQ(_publisher);
+                    bookBean.setPublisher(publisher);
+                }
+                if (summary.has("pubdate")) {
+                    String _pubdate = summary.get("pubdate").toString();
+                    String pubdate = trimDQ(_pubdate);
+                    bookBean.setPubdate(pubdate);
+                }
+                if (summary.has("series")) {
+                    String series = summary.get("series").toString();
+                    bookBean.setSeries(series);
+                }
+                if (summary.has("cover")) {
+                    String cover = summary.get("cover").toString();
+                    System.out.println(cover);
+                    bookBean.setCover(trimDQ(cover));
+                }
+                if (summary.has("author")) {
+                    String _author = summary.get("author").toString();
+                    String author = trimDQ(_author);
+                    bookBean.setAuthor(author);
+                }
+            }
+            if (obj.has("onix")) {
+                JsonNode onix = obj.get("onix");
+                JsonNode detail = onix.get("CollateralDetail");
+                if (detail.has("TextContent")) {
+                    JsonNode textContent = detail.get("TextContent");
+                    if (textContent.get(1) != null) {
+                        JsonNode textNode = textContent.get(1);
+                        String _text = textNode.get("Text").toString();
+                        String text = nl2Br( trimDQ(_text) );
+                        // String text = trimDQ(_text);
+                        System.out.println("text:" + text);
+                        bookBean.setDescription(text);
                     }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         System.out.println(System.getProperty("file.encoding"));
     }
@@ -98,5 +113,10 @@ public class BookController {
         } else {
             return str;
         }
+    }
+    
+    public String nl2Br( String text ) {
+        String str = text.replace("\\n", "<br/>");
+        return str;
     }
 }

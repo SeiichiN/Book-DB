@@ -21,7 +21,7 @@ public class BookBean {
     
     public void getBookData() {
         BookController controller = new BookController();
-        controller.execute( this );
+        controller.get( this );
     }
     
     @Override

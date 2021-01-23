@@ -15,3 +15,16 @@ h1 {
     color: red;
 }
 
+.c1 {
+    width: 10%;
+    background-color: #eee;
+}
+
+.c2 {
+    width: 90%;
+}
+
+.preformatted {
+    white-space: pre-wrap;
+}
+
