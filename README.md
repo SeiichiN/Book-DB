@@ -9,7 +9,7 @@ $ mvn clean package
 
 Payaraサーバーを起動。
 
-$ <Payara-Directory>/bin/asadmin start-domain
+$ &lt;Payara-Directory&gt;/bin/asadmin start-domain
 
 僕は $HOME/Payara_Server を Payara-Directory としている。
 
@@ -28,4 +28,4 @@ bookDB.war は targetディレクトリにある。
 アクセスできる。
 
 
-<!-- 修正時刻: Wed Feb 17 07:13:54 2021 -->
+<!-- 修正時刻: Wed 2022/06/08 19:01:151 -->
